@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\ReservesController;
+use App\Http\Controllers\CancelsController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -24,10 +26,13 @@ require __DIR__.'/auth.php';
 
 
 Route::group(['middleware' => ['auth']], function () {                                    // 追記
-    Route::resource('users', UsersController::class, ['only' => ['index', 'show']]);     // 追記
+    
     Route::post('/reserves', [ReservesController::class, 'store'])->name('reserves.store');
     Route::get('/reserves', [ReservesController::class, 'index'])->name('reserves.index');
-    
+    Route::get('/users/reserves/{id}', [UsersController::class, 'showReserves'])->name('users.reserves');
+    Route::delete('/users/reserves/{id}', [ReservesController::class, 'destroy'])->name('reserves.destroy');
+    Route::post('/users/reserves', [CancelsController::class, 'store'])->name('reserves.cancel');
+    Route::delete('/reserves/{id}', [CancelsController::class, 'destroy'])->name('cancels.destroy');
 });
 
 

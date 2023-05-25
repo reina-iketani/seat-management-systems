@@ -22,14 +22,27 @@ class Reserve extends Model
     }
     
     public static function search($targetDate){
-       
-        $weekday = Carbon::parse($targetDate)->format('D'); // 指定日から曜日を求める
-        $list = Reserve::query()
+        $weekday = Carbon::parse($targetDate)->format('D');
+    
+        $list = Reserve::with(['user', 'cancels'])
             ->where('start_date', '<=', $targetDate)
-            ->where('end_date', '>=', $targetDate)
+            ->where(function ($query) use ($targetDate, $weekday) {
+                $query->where('end_date', '>=', $targetDate)
+                    ->orWhereNull('end_date');
+            })
             ->where('weekday', $weekday)
-            ->get(); // startDate<=targetDate && endDate>=targetDate && weekday=weekday のレコードを抽出
-        
+            ->get();
+    
         return $list;
     }
+    
+    
+    public function cancels()
+    {
+        return $this->hasMany(Cancel::class);
+    }
+    
+    
+    
+    
 }

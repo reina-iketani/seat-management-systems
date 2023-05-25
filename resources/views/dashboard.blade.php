@@ -3,9 +3,10 @@
 
 @section('content')
     @if (Auth::check())
-        <div class="sm:grid sm:grid-cols-3 sm:gap-10">
-          @include('reserves.navtabs')  
-            <div class="sm:col-span-2">
+        
+            <div class="sm:col-span-2 mt-4">
+                @include('reserves.navtabs')  
+            
                 
                 {{-- 投稿一覧 --}}
                 @include('reserves.reserve')
